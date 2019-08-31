@@ -29,6 +29,9 @@ sudo mount -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 # give further instructions
 echo "Next steps:
 * Copy all files to the folder \"$PROJECT\".
+* Optional: create an md5 checksum file for the files in \"$PROJECT\" with
+  ./bakudf-md5.sh create $PROJECT
+  and copy \"$PROJECT.md5\" into the \"$PROJECT\" folder.
 * Unmount the folder with \"umount $PROJECT\".
 * Burn the udf file to a disc, e.g., with:
   cdrecord -v -doa driveropts=burnfree dev=/dev/sr0 $PROJECT.udf
