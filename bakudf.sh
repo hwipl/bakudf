@@ -3,6 +3,16 @@
 PROJECT=$1
 SIZE=$2
 
+# usage
+if [[ "$#" -lt 2 ]]; then
+	echo "Usage:"
+	echo "    $0 <project> <size>"
+	echo "Arguments:"
+	echo "    project: name of the new project"
+	echo "    size:    expected size of the project, e.g., 25GB, 5GB"
+	exit
+fi
+
 # create udf file for project
 truncate -s "$SIZE" "$PROJECT".udf
 
