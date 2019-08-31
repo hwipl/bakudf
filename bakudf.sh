@@ -3,6 +3,11 @@
 PROJECT=$1
 SIZE=$2
 
+# other program locations
+TRUNCATE=/usr/bin/truncate
+MKUDFFS=/usr/bin/mkudffs
+MOUNT=/usr/bin/mount
+
 # usage
 if [[ "$#" -lt 2 ]]; then
 	echo "Usage:"
@@ -24,16 +29,16 @@ done
 
 # create udf file for project
 echo "Creating a new udf file: $PROJECT.udf"
-truncate -s "$SIZE" "$PROJECT".udf
+$TRUNCATE -s "$SIZE" "$PROJECT".udf
 
 # create udf file system in udf file
 echo "Creating a new udf file system in $PROJECT.udf"
-mkudffs --label="$PROJECT" "$PROJECT".udf > /dev/null
+$MKUDFFS --label="$PROJECT" "$PROJECT".udf > /dev/null
 
 # mount udf file
 echo "Mounting $PROJECT.udf to the folder \"$PROJECT\""
 mkdir "$PROJECT"
-sudo mount -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
+sudo $MOUNT -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 
 # give further instructions
 echo "Next steps:
