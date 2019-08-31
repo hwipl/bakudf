@@ -19,7 +19,7 @@ truncate -s "$SIZE" "$PROJECT".udf
 
 # create udf file system in udf file
 echo "Creating a new udf file system in $PROJECT.udf"
-mkudffs --label="$PROJECT" "$PROJECT".udf
+mkudffs --label="$PROJECT" "$PROJECT".udf > /dev/null
 
 # mount udf file
 echo "Mounting $PROJECT.udf to the folder \"$PROJECT\""
