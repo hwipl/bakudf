@@ -13,6 +13,15 @@ if [[ "$#" -lt 2 ]]; then
 	exit
 fi
 
+# check if files/folders exist and abort in that case
+FILES="$PROJECT.udf $PROJECT"
+for i in $FILES; do
+	if [[ -e "$i" ]]; then
+		echo "$i already exists."
+		exit
+	fi
+done
+
 # create udf file for project
 echo "Creating a new udf file: $PROJECT.udf"
 truncate -s "$SIZE" "$PROJECT".udf
