@@ -1,15 +1,17 @@
 #!/bin/bash
 
-#truncate -s 25GB "$1".udf
-truncate -s 5GB "$1".udf
-mkudffs "$1".udf
+PROJECT=$1
+SIZE=$2
 
-#mkudffs --media-type=dvd /tmp/cdimage.udf
-mkudffs --label="$1" "$1".udf
+# create udf file for project
+truncate -s "$SIZE" "$PROJECT".udf
 
-sudo mkdir "$1"
-sudo mount -t udf -o loop,rw "$1".udf "$1"
+# create udf file system in udf file
+mkudffs --label="$PROJECT" "$PROJECT".udf
 
+# mount udf file
+sudo mkdir "$PROJECT"
+sudo mount -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 
 #/path/to/cdrecord -v -doa driveropts=burnfree \
 #    dev=/dev/sr0 MYBLURAY-DISC.udf
