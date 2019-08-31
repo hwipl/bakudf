@@ -32,7 +32,7 @@ mkudffs --label="$PROJECT" "$PROJECT".udf > /dev/null
 
 # mount udf file
 echo "Mounting $PROJECT.udf to the folder \"$PROJECT\""
-sudo mkdir "$PROJECT"
+mkdir "$PROJECT"
 sudo mount -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 
 # give further instructions
