@@ -14,14 +14,22 @@ if [[ "$#" -lt 2 ]]; then
 fi
 
 # create udf file for project
+echo "Creating a new udf file: $PROJECT.udf"
 truncate -s "$SIZE" "$PROJECT".udf
 
 # create udf file system in udf file
+echo "Creating a new udf file system in $PROJECT.udf"
 mkudffs --label="$PROJECT" "$PROJECT".udf
 
 # mount udf file
+echo "Mounting $PROJECT.udf to the folder \"$PROJECT\""
 sudo mkdir "$PROJECT"
 sudo mount -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 
-#/path/to/cdrecord -v -doa driveropts=burnfree \
-#    dev=/dev/sr0 MYBLURAY-DISC.udf
+# give further instructions
+echo "Next steps:
+* Copy all files to the folder \"$PROJECT\".
+* Unmount the folder with \"umount $PROJECT\".
+* Burn the udf file to a disc, e.g., with:
+  cdrecord -v -doa driveropts=burnfree dev=/dev/sr0 $PROJECT.udf
+  (Replace /dev/sr0 with the path to your device)."
