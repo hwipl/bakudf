@@ -8,6 +8,23 @@ MOUNT=/usr/bin/mount
 UMOUNT=/usr/bin/umount
 
 # output text
+USAGE="bakudf - udf backup helper script
+
+Usage:
+    $0 <create> <project> <size>
+    $0 <md5> <project> [create|verify]
+    $0 <finalize> <project>
+Arguments:
+    create:   create a new project
+    md5:      create (default) or verify md5 checksums for a project
+    finalize: finalize a project
+    project:  name of the new project
+    size:     expected size of the project, e.g., 25GB, 5GB
+
+First steps:
+* Create a new project with
+  $0 create <project> <size>"
+
 STEPS_AFTER_CREATE="Next steps:
 * Copy all files to the folder \"%s\".
 * Optional: create md5 checksums for the files in \"%s\" with
@@ -26,17 +43,6 @@ STEPS_AFTER_FINALIZE="Next steps:
   (Replace /dev/sr0 with the path to your device).
 * You can remove the project folder \"%s\" and udf file \"%s.udf\""
 
-# print usage
-function print_usage {
-	echo "Usage:"
-	echo "    $0 <create> <project> <size>"
-	echo "    $0 <md5> <project> [create|verify]"
-	echo "    $0 <finalize> <project>"
-	echo "Arguments:"
-	echo "    project: name of the new project"
-	echo "    size:    expected size of the project, e.g., 25GB, 5GB"
-}
-
 # create new project
 function create_project {
 	# arguments
@@ -45,7 +51,7 @@ function create_project {
 
 	# check arguments
 	if [[ "$#" -lt 2 ]]; then
-		print_usage
+		echo "$USAGE"
 		exit
 	fi
 
@@ -86,7 +92,7 @@ function run_md5 {
 
 	# check arguments
 	if [[ "$#" -lt 1 ]]; then
-		print_usage
+		echo "$USAGE"
 		exit
 	fi
 
@@ -121,7 +127,7 @@ function finalize_project {
 
 	# check arguments
 	if [[ "$#" -lt 1 ]]; then
-		print_usage
+		echo "$USAGE"
 		exit
 	fi
 
@@ -142,5 +148,5 @@ elif [[ "$1" == "md5" ]]; then
 	shift
 	run_md5 "$@"
 else
-	print_usage
+	echo "$USAGE"
 fi
