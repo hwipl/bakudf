@@ -3,6 +3,7 @@
 # other program locations
 TRUNCATE=/usr/bin/truncate
 MKUDFFS=/usr/bin/mkudffs
+SUDO=/usr/bin/sudo
 MOUNT=/usr/bin/mount
 
 # output text
@@ -57,7 +58,7 @@ function create_project {
 	# mount udf file
 	echo "Mounting $PROJECT.udf to the folder \"$PROJECT\""
 	mkdir "$PROJECT"
-	sudo $MOUNT -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
+	$SUDO $MOUNT -t udf -o loop,rw "$PROJECT".udf "$PROJECT"
 
 	# give further instructions
 	echo "$STEPS_AFTER_CREATE"
