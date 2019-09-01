@@ -19,7 +19,7 @@ STEPS_AFTER_CREATE="Next steps:
 # print usage
 function print_usage {
 	echo "Usage:"
-	echo "    $0 <project> <size>"
+	echo "    $0 <create> <project> <size>"
 	echo "Arguments:"
 	echo "    project: name of the new project"
 	echo "    size:    expected size of the project, e.g., 25GB, 5GB"
@@ -63,4 +63,7 @@ function create_project {
 	echo "$STEPS_AFTER_CREATE"
 }
 
-create_project "$@"
+if [[ "$1" == "create" ]]; then
+	shift
+	create_project "$@"
+fi
