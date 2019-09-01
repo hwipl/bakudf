@@ -8,13 +8,17 @@ TRUNCATE=/usr/bin/truncate
 MKUDFFS=/usr/bin/mkudffs
 MOUNT=/usr/bin/mount
 
-# usage
-if [[ "$#" -lt 2 ]]; then
+# print usage
+function print_usage {
 	echo "Usage:"
 	echo "    $0 <project> <size>"
 	echo "Arguments:"
 	echo "    project: name of the new project"
 	echo "    size:    expected size of the project, e.g., 25GB, 5GB"
+}
+
+if [[ "$#" -lt 2 ]]; then
+	print_usage
 	exit
 fi
 
