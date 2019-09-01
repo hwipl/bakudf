@@ -10,9 +10,15 @@ UMOUNT=/usr/bin/umount
 # output text
 STEPS_AFTER_CREATE="Next steps:
 * Copy all files to the folder \"%s\".
-* Optional: create an md5 checksum file for the files in \"%s\" with
-  ./bakudf-md5.sh create %s
-  and copy \"%s.md5\" into the \"%s\" folder."
+* Optional: create md5 checksums for the files in \"%s\" with
+  $0 md5 %s
+* Finalize your project with:
+  $0 finalize %s"
+
+STEPS_AFTER_MD5_CREATE="Next steps:
+* Optional: copy \"%s.md5\" into your project folder \"%s\".
+* Finalize your project with:
+  $0 finalize %s"
 
 STEPS_AFTER_FINALIZE="Next steps:
 * Burn the udf file to a disc, e.g., with:
@@ -24,6 +30,7 @@ STEPS_AFTER_FINALIZE="Next steps:
 function print_usage {
 	echo "Usage:"
 	echo "    $0 <create> <project> <size>"
+	echo "    $0 <md5> <project> [create|verify]"
 	echo "    $0 <finalize> <project>"
 	echo "Arguments:"
 	echo "    project: name of the new project"
@@ -68,6 +75,45 @@ function create_project {
 	echo "${STEPS_AFTER_CREATE//%s/$PROJECT}"
 }
 
+# run md5 commands
+function run_md5 {
+	# arguments
+	PROJECT=$1
+	CMD=$2
+
+	# md5 file
+	MD5=$(pwd)"/$PROJECT".md5
+
+	# check arguments
+	if [[ "$#" -lt 1 ]]; then
+		print_usage
+		exit
+	fi
+
+	# check if file already exists
+	if [[ -e "$MD5" ]]; then
+		echo "$MD5 already exists."
+		exit
+	fi
+
+	# create a new md5 file for all files in a directory
+	if [[ -z "$CMD" || "$CMD" == "create" ]]; then
+		echo "Creating md5 checksums for \"$PROJECT\" in \"$MD5\""
+		cd "$PROJECT" || exit
+		find . -type f -exec md5sum {} \;>> "$MD5"
+
+		# give further instruction
+		echo "${STEPS_AFTER_MD5_CREATE//%s/$PROJECT}"
+	fi
+
+	# verify files in a directory with md5 file
+	if [[ "$CMD" == "verify" ]]; then
+		cd "$PROJECT" || exit
+		echo "Verifying $(pwd) with $MD5"
+		md5sum -c "$MD5"
+	fi
+}
+
 # finalize a project
 function finalize_project {
 	# arguments
@@ -92,6 +138,9 @@ if [[ "$1" == "create" ]]; then
 elif [[ "$1" == "finalize" ]]; then
 	shift
 	finalize_project "$@"
+elif [[ "$1" == "md5" ]]; then
+	shift
+	run_md5 "$@"
 else
 	print_usage
 fi
